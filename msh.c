@@ -15,9 +15,10 @@ ssize_t nread;
 		//argument Storage
 		char *args[128];
 		int argc;
+		int last_status = 0; //task5: store previous command exit status
 while (1)
 {
-   printf("msh> ");
+   printf("msh[%d]> ", last_status);//display prev command status
    fflush(stdout);
    //read input of any length
    nread = getline(&line, &len,stdin);
@@ -88,12 +89,19 @@ while (1)
 			}
 			else
 			{
-			//parent waits child
+			//task 5 added fore ground child 
 			int status;
 			if (waitpid(pid, &status, 0) == -1)
 				{
 					perror("waitpid");
+					last_status = 1;
 					}
+					else{
+					//normal exit status
+					if (WIFEXITED(status)){last_status = WEXITSTATUS(status);}
+						else if
+						(WIFSIGNALED(status)){last_status = 128 + WTERMSIG(status);}
+						}
 			}
 
 		 }
