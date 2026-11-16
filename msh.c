@@ -7,6 +7,8 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <errno.h> //task4 added
+#include <signal.h> //task6 added
+
 int main(void)
 {
     char *line = NULL;
@@ -16,7 +18,23 @@ ssize_t nread;
 		char *args[128];
 		int argc;
 		int last_status = 0; //task5: store previous command exit status
+// TASK 6 ADDED TRACK BACKGROUND PROCESS IDS
+      pid_t background_jobs[128];
+	int background_count = 0;
+
 while (1)
+	for (int i = 0; i < background_count;)
+		{
+		int bg_status;
+		pid_t result = waitpid(background_jobs[i], &bg_status, WHOANG);
+		if (result > 0 || (resukt == -1 && errno == ECHILD))
+		{printf("\nBackground process %d finished\n", background_jobs[i]); background_jobs[i] = backgornd_jobs[background_count -1]; backgound_count--;}
+			esle {i++}	
+	}
+
+
+
+
 {
    printf("msh[%d]> ", last_status);//display prev command status
    fflush(stdout);
@@ -44,6 +62,7 @@ while (1)
 		if (argc == 0){
 		continue;
 				}
+
 				//TASK4 BUILT IN HELP COMMAND
 			if (strcmp(args[0], "help") == 0)
 				{
