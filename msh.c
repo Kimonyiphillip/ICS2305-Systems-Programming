@@ -2,7 +2,10 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h> //task added
+#include <string.h> //task2  added
+#include <unistd.h>//task3 added
+#include <sys/types.h>
+#include <sys/wait.h>
 int main(void)
 {
     char *line = NULL;
@@ -39,15 +42,33 @@ while (1)
 		if (argc == 0){
 		continue;
 				}
-		//display args for testing
-		printf("argumnts received: \n");
-		for (int i = 0; i < argc; i++)
-			{
-			printf("args[%d] = %s\n", i ,args[i]);
+			//TASK3 CODE ADDED CHILD PROCESS
+		pid_t pid = fork();
+		if (pid < 0){
+			//handle fork error
+			perror("fork");
+			continue;
 			}
+			if (pid == 0){
+				//child executes command
+				execvp(args[0], args);
+			perror(args[0]);
+			exit(EXIT_FAILURE);
+			}
+			else
+			{
+			//parent waits child
+			int status;
+			if (waitpid(pid, &status, 0) == -1)
+				{
+					perror("waitpid");
+					}
+			}
+
 		 }
 		//RELEASE ALLOCTED MEMORY
 		free(line);
 		return 0;
 }
+
 
