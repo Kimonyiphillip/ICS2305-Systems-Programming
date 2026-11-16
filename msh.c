@@ -8,7 +8,7 @@
 #include <sys/wait.h>
 #include <errno.h> //task4 added
 #include <signal.h> //task6 added
-
+#include <fcntl.h>// Task7 added
 int main(void)
 {
     char *line = NULL;
@@ -92,6 +92,22 @@ while (1)
 						continue;
 
 }
+//task7  added detect output redirection
+		char output_file = NULL;
+		for (int i = 0; i < argc; i++)
+			{if (strcmp(args[i], ">") == 0){if (i + 1 < argc{output_file = argd[i + 1];
+					args[i]= NULL;
+					argc = i;}
+					else
+					fprintf(stderr, "msh: missing filename after >\n");
+					output file=NULL;
+					argc = 0}
+				break;
+					}
+				}
+    			if (argc == 0){
+					continue;
+					}
 
 			//TASK3 CODE ADDED CHILD PROCESS
 		pid_t pid = fork();
