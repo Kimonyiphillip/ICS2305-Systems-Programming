@@ -6,6 +6,7 @@
 #include <unistd.h>//task3 added
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <errno.h> //task4 added
 int main(void)
 {
     char *line = NULL;
@@ -42,6 +43,36 @@ while (1)
 		if (argc == 0){
 		continue;
 				}
+				//TASK4 BUILT IN HELP COMMAND
+			if (strcmp(args[0], "help") == 0)
+				{
+					printf("Available commands:\n");
+				     printf("cd [directory] - Change directory\n");
+			         printf("help - Display this help message\n");
+			      printf("exit - exit the shell\n");
+						continue;
+
+      				}
+				//built in eEXIT command
+				if (strcmp(args[0], "cd") == 0)
+					{
+					char *directory;
+					if (args[1] == NULL)
+					{
+						directory = getenv("HOME");
+						}
+						else
+						{
+						    directory = args[1];
+						}
+				if (directory == NULL || chdir(directory) != 0)
+						{
+						perror("cd");
+							}
+						continue;
+
+}
+
 			//TASK3 CODE ADDED CHILD PROCESS
 		pid_t pid = fork();
 		if (pid < 0){
